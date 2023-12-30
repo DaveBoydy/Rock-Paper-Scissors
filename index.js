@@ -4,6 +4,11 @@ const ROCK = "rock";
 const PAPER = "paper";
 const SCISSORS = "scissors";
 
+let playerScore = 0;
+let computerScore = 0;
+let playerChoice;
+let computerChoice;
+
 function getComputerChoice() {
 
     let hand = Math.floor(Math.random() * (MAX - MIN + 1)) + MIN;
@@ -19,13 +24,9 @@ function getComputerChoice() {
 
 }
 
-let playerChoice = prompt("Rock, Paper or Scissors?", "Rock");
-let computerChoice = getComputerChoice();
-
-function playGame(playerSelection, computerSelection) {
+function playRound(playerSelection, computerSelection) {
 
     playerSelection = playerSelection.toLowerCase();
-
 
     if (!(playerSelection === ROCK || playerSelection === PAPER || playerSelection === SCISSORS)) {
 
@@ -36,29 +37,53 @@ function playGame(playerSelection, computerSelection) {
     if (playerSelection == ROCK && computerSelection == ROCK) {
 
         logResult("It's a tie, try again");
-        resetRound();
+        replayRound();
         return;
     }
     if (playerSelection == PAPER && computerSelection == PAPER) {
 
         logResult("It's a tie, try again");
-        resetRound();
+        replayRound();
         return;
     }
     if (playerSelection == SCISSORS && computerSelection == SCISSORS) {
 
         logResult("It's a tie, try again");
-        resetRound();
+        replayRound();
         return;
     }
 
-    if (playerSelection == ROCK && computerSelection == PAPER) return logResult("You Lose! Paper beats Rock");
-    if (playerSelection == PAPER && computerSelection == SCISSORS) return logResult("You Lose! Scissors beats Paper");
-    if (playerSelection == SCISSORS && computerSelection == ROCK) return logResult("You Lose! Rock beats Scissors");
+    if (playerSelection == ROCK && computerSelection == PAPER) {
 
-    if (playerSelection == ROCK && computerSelection == SCISSORS) return logResult("You Win! Rock beats Scissors");
-    if (playerSelection == PAPER && computerSelection == ROCK) return logResult("You Win! Paper beats Rock");
-    if (playerSelection == SCISSORS && computerSelection == PAPER) return logResult("You Win! Scissors beats Paper");
+        computerScore += 1;
+        return logResult("You Lose! Paper beats Rock");
+    }
+    if (playerSelection == PAPER && computerSelection == SCISSORS) {
+
+        computerScore += 1;
+        return logResult("You Lose! Scissors beats Paper");
+    }
+    if (playerSelection == SCISSORS && computerSelection == ROCK) {
+
+        computerScore += 1;
+        return logResult("You Lose! Rock beats Scissors");
+    }
+
+    if (playerSelection == ROCK && computerSelection == SCISSORS) {
+
+        playerScore += 1;
+        return logResult("You Win! Rock beats Scissors");
+    }
+    if (playerSelection == PAPER && computerSelection == ROCK) {
+
+        playerScore += 1;
+        return logResult("You Win! Paper beats Rock");
+    }
+    if (playerSelection == SCISSORS && computerSelection == PAPER) {
+
+        playerScore += 1;
+        return logResult("You Win! Scissors beats Paper");
+    }
 }
 
 function logResult(result) {
@@ -69,15 +94,36 @@ function logResult(result) {
 function logError() {
 
     console.log("Please enter Rock, Paper or Scissors and try again");
-    resetRound()
+    replayRound();
 }
 
-function resetRound() {
+function replayRound() {
 
     computerChoice = getComputerChoice();
     playerChoice = prompt("Rock, Paper or Scissors?", "Rock");
 
-    playGame(playerChoice, computerChoice);
+    playRound(playerChoice, computerChoice);
 }
 
-playGame(playerChoice, computerChoice);
+function game() {
+
+    for (let i = 0; i < 5; i++) {
+
+        computerChoice = getComputerChoice();
+        playerChoice = prompt("Rock, Paper or Scissors?", "Rock");
+        playRound(playerChoice, computerChoice);
+
+        console.log("Player Score: " + playerScore);
+        console.log("Computer Score: " + computerScore);
+    }
+
+    if (playerScore > computerScore) {
+
+        console.log("You won! congratulations you beat the computer.")
+    } else {
+        console.log("you lost! the computer beat you.")
+    }
+
+}
+
+game();
